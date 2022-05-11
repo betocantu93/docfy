@@ -13,13 +13,12 @@ import { DemoComponentChunk } from './plugins/types';
 import docfyOutputTemplate from './docfy-output-template';
 import getDocfyConfig from './get-config';
 import { isDemoComponents } from './plugins/utils';
-import cacheKeyForTree from 'calculate-cache-key-for-tree';
 import debugFactory from 'debug';
-const debug = debugFactory('prysmex-docfy-ember');
+const debug = debugFactory('@docfy/ember');
 
 const templateOnlyComponent = `
-import Component from '@glimmer/component';
-export default class extends Component {}
+import templateOnly from '@ember/component/template-only';
+export default templateOnly();
 `;
 
 function ensureDirectoryExistence(filePath: string): void {
@@ -42,11 +41,6 @@ function hasBackingJS(chunks: DemoComponentChunk[]): boolean {
   return false;
 }
 
-// eslint-disable-next-line
-function isDeepAddonInstance(addon: any): boolean {
-  return addon.parent !== addon.project;
-}
-
 class DocfyBroccoli extends Plugin {
   config: DocfyConfig;
 
@@ -60,7 +54,9 @@ class DocfyBroccoli extends Plugin {
     debug('Config: ', this.config);
     const docfy = new Docfy(this.config);
     const result = await docfy.run(this.config.sources as SourceConfig[]);
-
+    const snippets = {
+      components: {}
+    };
     result.content.forEach((page) => {
       const parts = [this.outputPath, 'templates', page.meta.url];
 
@@ -70,6 +66,7 @@ class DocfyBroccoli extends Plugin {
 
       const fileName = `${path.join(...parts)}.hbs`;
 
+      // console.log(fileName, "RENDERED AS", page.rendered);
       ensureDirectoryExistence(fileName);
       fs.writeFileSync(fileName, page.rendered);
 
@@ -83,6 +80,11 @@ class DocfyBroccoli extends Plugin {
               `${component.name.dashCase}.${chunk.ext}`
             );
             ensureDirectoryExistence(chunkPath);
+
+            snippets.components[`${component.name.dashCase}`] = {
+              ...(snippets.components[`${component.name.dashCase}`] || {}),
+              [chunk.ext]: chunk.code
+            };
             fs.writeFileSync(chunkPath, chunk.code);
           });
 
@@ -93,6 +95,10 @@ class DocfyBroccoli extends Plugin {
               `${component.name.dashCase}.js`
             );
             ensureDirectoryExistence(chunkPath);
+            snippets.components[`${component.name.dashCase}`] = {
+              ...(snippets.components[`${component.name.dashCase}`] || {}),
+              js: templateOnlyComponent
+            };
             fs.writeFileSync(chunkPath, templateOnlyComponent);
           }
         });
@@ -109,11 +115,19 @@ class DocfyBroccoli extends Plugin {
       'public',
       'docfy-urls.json'
     );
+
     ensureDirectoryExistence(urlsJsonFile);
     fs.writeFileSync(
       urlsJsonFile,
       JSON.stringify(result.content.map((page) => page.meta.url))
     );
+    const snippetsJsonFile = path.join(
+      this.outputPath,
+      'public',
+      'docfy-snippets.json'
+    );
+    ensureDirectoryExistence(snippetsJsonFile);
+    fs.writeFileSync(snippetsJsonFile, JSON.stringify(snippets));
     result.staticAssets.forEach((asset) => {
       const dest = path.join(this.outputPath, 'public', asset.toPath);
       ensureDirectoryExistence(dest);
@@ -123,36 +137,19 @@ class DocfyBroccoli extends Plugin {
 }
 
 module.exports = {
-  name: require('../package').name, // eslint-disable-line
+  name: require('../package').name, // eslint-disable-line @typescript-eslint/no-var-requires
 
   docfyConfig: undefined,
 
   included(...args: unknown[]): void {
-    if (!isDeepAddonInstance(this)) {
-      this.docfyConfig = getDocfyConfig(this.project.root);
-      this.bridge = new BroccoliBridge();
-    }
+    this.docfyConfig = getDocfyConfig(this.project.root);
+
+    this.bridge = new BroccoliBridge();
     this._super.included.apply(this, args);
   },
 
-  // Re-enables caching of this addon, due to opting out
-  // of the caching implicitly by specifying treeFor* methods
-  cacheKeyForTree(treeType: string): string {
-    switch (treeType) {
-      case 'app':
-      case 'addon': {
-        return cacheKeyForTree(treeType, this, [this.docfyConfig]);
-      }
-      default:
-        return cacheKeyForTree(treeType, this);
-    }
-  },
-
-  treeForApp(tree: Node): Node {
-    const trees: Node[] = [this._super.treeForApp.call(this, tree)];
-    if (isDeepAddonInstance(this)) {
-      return trees[0];
-    }
+  treeForApp(tree: InputNode): Node {
+    const trees: InputNode[] = [this._super.treeForApp.call(this, tree)];
 
     const inputs: InputNode[] = [new UnwatchedDir(this.project.root)];
 
@@ -170,12 +167,8 @@ module.exports = {
     return new MergeTrees(trees, { overwrite: true });
   },
 
-  treeForAddon(tree: Node): Node {
-    const trees: Node[] = [this._super.treeForAddon.call(this, tree)];
-    if (isDeepAddonInstance(this)) {
-      return trees[0];
-    }
-
+  treeForAddon(tree: InputNode): Node {
+    const trees: InputNode[] = [this._super.treeForAddon.call(this, tree)];
     const EmberApp = require('ember-cli/lib/broccoli/ember-app'); // eslint-disable-line
     const modulePrefix = this.project.config(EmberApp.env()).modulePrefix;
 
@@ -184,11 +177,7 @@ module.exports = {
     return new MergeTrees(trees);
   },
 
-  treeForPublic(): Node | undefined {
-    if (isDeepAddonInstance(this)) {
-      return;
-    }
-
+  treeForPublic(): Node {
     return new Funnel(
       (this.bridge as BroccoliBridge).placeholderFor('docfy-tree'),
       {
