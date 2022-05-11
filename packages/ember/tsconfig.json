@@ -24,10 +24,10 @@
     "paths": {
       "dummy/tests/*": ["tests/*"],
       "dummy/*": ["tests/dummy/app/*", "app/*"],
-      "@docfy/ember": ["addon"],
-      "@docfy/ember/*": ["addon/*"],
-      "@docfy/ember/test-support": ["addon-test-support"],
-      "@docfy/ember/test-support/*": ["addon-test-support/*"],
+      "prysmex-docfy-ember": ["addon"],
+      "prysmex-docfy-ember/*": ["addon/*"],
+      "prysmex-docfy-ember/test-support": ["addon-test-support"],
+      "prysmex-docfy-ember/test-support/*": ["addon-test-support/*"],
       "*": ["types/*"]
     }
   },

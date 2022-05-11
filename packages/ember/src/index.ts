@@ -15,7 +15,7 @@ import getDocfyConfig from './get-config';
 import { isDemoComponents } from './plugins/utils';
 import cacheKeyForTree from 'calculate-cache-key-for-tree';
 import debugFactory from 'debug';
-const debug = debugFactory('@docfy/ember');
+const debug = debugFactory('prysmex-docfy-ember');
 
 const templateOnlyComponent = `
 import Component from '@glimmer/component';

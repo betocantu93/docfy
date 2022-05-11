@@ -15,5 +15,5 @@ Some other text
 More text
 
 ```sh
-ember install @docfy/ember
+ember install prysmex-docfy-ember
 ```

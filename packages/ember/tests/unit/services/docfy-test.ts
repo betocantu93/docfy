@@ -1,8 +1,8 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import output from '@docfy/ember/output';
-import flatNested from '@docfy/ember/-private/flat-nested';
-import { DocfyService } from '@docfy/ember';
+import output from 'prysmex-docfy-ember/output';
+import flatNested from 'prysmex-docfy-ember/-private/flat-nested';
+import { DocfyService } from 'prysmex-docfy-ember';
 import sinon from 'sinon';
 
 module('Unit | Service | docfy', function (hooks) {

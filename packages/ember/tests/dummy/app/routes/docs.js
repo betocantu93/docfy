@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import output from '@docfy/ember/output';
+import output from 'prysmex-docfy-ember/output';
 
 export default class Docs extends Route {
   model() {

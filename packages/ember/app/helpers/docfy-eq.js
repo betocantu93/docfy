@@ -1,1 +1,1 @@
-export { default, docfyEq } from '@docfy/ember/helpers/docfy-eq';
+export { default, docfyEq } from 'prysmex-docfy-ember/helpers/docfy-eq';

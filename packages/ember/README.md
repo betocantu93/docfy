@@ -1,4 +1,4 @@
-# @docfy/ember
+# prysmex-docfy-ember
 
 Ember integration with Docfy.
 
@@ -11,7 +11,7 @@ Ember integration with Docfy.
 ## Installation
 
 ```
-ember install @docfy/ember
+ember install prysmex-docfy-ember
 ```
 
 ## Usage

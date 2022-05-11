@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import output from '@docfy/ember/output';
+import output from 'prysmex-docfy-ember/output';
 import { NestedPageMetadata, PageMetadata } from '@docfy/core/lib/types';
 import flatNested from '../-private/flat-nested';
 import { inject as service } from '@ember/service';

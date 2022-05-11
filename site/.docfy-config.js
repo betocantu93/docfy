@@ -38,7 +38,7 @@ module.exports = {
   labels: {
     components: 'Components',
     core: '@docfy/core',
-    ember: '@docfy/ember',
+    ember: 'prysmex-docfy-ember',
     docs: 'Documentation'
   }
 };

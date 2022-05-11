@@ -21,9 +21,9 @@ cd docfy-example
 ## Add Docfy dependency
 
 ```
-yarn add -D @docfy/ember
+yarn add -D prysmex-docfy-ember
 // or
-npm install --dev @docfy/ember
+npm install --dev prysmex-docfy-ember
 ```
 
 ## Add Docfy Routes
@@ -31,13 +31,13 @@ npm install --dev @docfy/ember
 Docfy has a function that adds all the routes to your Ember app. It understands
 the output of Docfy Core and process all the page URLs to add their paths to the Ember app.
 
-In your `app/router.js` import `import { addDocfyRoutes } from '@docfy/ember';`
+In your `app/router.js` import `import { addDocfyRoutes } from 'prysmex-docfy-ember';`
 then add `addDocfyRoutes(this)` to the Router Map. The final result looks like the following:
 
 ```js
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
-import { addDocfyRoutes } from '@docfy/ember';
+import { addDocfyRoutes } from 'prysmex-docfy-ember';
 
 export default class Router extends EmberRouter {
   location = config.locationType;

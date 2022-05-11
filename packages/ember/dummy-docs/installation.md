@@ -7,8 +7,8 @@ order: 1
 ```sh
 
 # Using npm
-npm install --save-dev @docfy/ember
+npm install --save-dev prysmex-docfy-ember
 
 # Using Yarn
-yarn add --dev @docfy/ember
+yarn add --dev prysmex-docfy-ember
 ```

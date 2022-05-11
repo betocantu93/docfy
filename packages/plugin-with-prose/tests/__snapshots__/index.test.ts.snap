@@ -39,7 +39,7 @@ Array [
 </code></pre>
 <div class=\\"prose dark:prose-light\\">
 <p>More text</p>
-<pre><code class=\\"language-sh\\">ember install @docfy/ember
+<pre><code class=\\"language-sh\\">ember install prysmex-docfy-ember
 </code></pre>
 </div>",
   ],
@@ -85,7 +85,7 @@ Array [
 </code></pre>
 <div class=\\"prose\\">
 <p>More text</p>
-<pre><code class=\\"language-sh\\">ember install @docfy/ember
+<pre><code class=\\"language-sh\\">ember install prysmex-docfy-ember
 </code></pre>
 </div>",
   ],

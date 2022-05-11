@@ -1,1 +1,1 @@
-export { default } from '@docfy/ember/components/docfy-demo/example';
+export { default } from 'prysmex-docfy-ember/components/docfy-demo/example';

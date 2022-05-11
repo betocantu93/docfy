@@ -1,6 +1,6 @@
 import EmberRouter from '@ember/routing/router';
 import config from 'dummy/config/environment';
-import { addDocfyRoutes } from '@docfy/ember';
+import { addDocfyRoutes } from 'prysmex-docfy-ember';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
